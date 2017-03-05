@@ -4,11 +4,12 @@
 var objects = [];//Declaring the array that will contain our objects
 var handisFull=false;//Bool to see if we are already dragging an object or not
 var frameCount;//A variable for calculating the speed of the mouse
-var lastX;//Another variable for calculating the speed
-var speed;//The speed of the mouse
+var lastX,lastY;//Another variable for calculating the speed
+var xspeed,yspeed;//The speed of the mouse
 
 function setup() {
   lastX=mouseX;
+  lastY=mouseY;
   createCanvas(window.innerWidth, window.innerHeight);
   for (var i = 0; i < 5; i++) {
     objects[i] = new Drop();//Creating the objects and storing them in the array
@@ -25,7 +26,8 @@ function draw() {
   mouseSpeed();//Calling the function that calculates the mouse Speed
 }
 function Drop() {
-  var speedfactor=0;//A variable for the inertia calculations
+  var xspeedfactor=0;//A variable for the inertia calculations
+  var yspeedfactor=0;
   var lastDraggingState=false;//Another variable for inertia calculations
   var lastState=false;//A bool to see if the last mouse clicking state
   var isDragging=false;//A bool for seeing if we're dragging this object
@@ -63,7 +65,7 @@ function Drop() {
       this.x=mouseX-50;
       this.y=mouseY-50;
     }
-    //If the bject gets out of the boundaries, we teleport i to the other side of te canvas
+    //If the object gets out of the boundaries, we teleport it to the other side of te canvas
     if (this.y > height) {
       this.y = random(-200, -100);
       this.yspeed = random(4, 10);
@@ -85,22 +87,31 @@ function Drop() {
   }
 
   this.calculateInertia = function(){
-    //Calculating the X inertia
+    //Calculations for x & y inertia
     if(lastDraggingState && !isDragging ){
-      if (speed<0) {
-        speedfactor=1;
-      }else if (speed>0) {
-        speedfactor=-1;
+      if (xspeed<0) {
+        xspeedfactor=1;
+      }else if (xspeed>0) {
+        xspeedfactor=-1;
       }else {
-        speedfactor=0;
+        xspeedfactor=0;
       }
-      this.xspeed=map(speed,0,100,0,50);
+      if (yspeed<0) {
+        yspeedfactor=1;
+      }else if (yspeed>0) {
+        yspeedfactor=-1;
+      }else {
+        yspeedfactor=0;
+      }
+      this.xspeed=map(xspeed,0,100,0,50);
+      this.yspeed=map(yspeed,0,100,0,50);
       lastDraggingState=false;
     }
-    this.xspeed=this.xspeed+(speedfactor*0.1);
-    if(this.xspeed<0 && speedfactor==-1){
+    //Even more calculations for x inertia
+    this.xspeed=this.xspeed+(xspeedfactor*0.1);
+    if(this.xspeed<0 && xspeedfactor==-1){
       this.xspeed=0;
-    }else if(this.xspeed>0 && speedfactor==1){
+    }else if(this.xspeed>0 && xspeedfactor==1){
       this.xspeed=0;
     }
     if(this.xspeed>25){
@@ -109,7 +120,7 @@ function Drop() {
     if (this.xspeed< -25) {
       this.xspeed=-25;
     }
-    //Calculating the Y inertia
+    //Even more calculations for y inertia
       var grav = random(0, 0.7);
       this.yspeed = this.yspeed + grav;
   }
@@ -118,7 +129,9 @@ function mouseSpeed(){
   //Calculating the mouse speed
   if (frameCount >=3) {
     frameCount=0;
-    speed=mouseX-lastX;
+    yspeed=mouseY-lastY;
+    xspeed=mouseX-lastX;
+    lastY=mouseY;
     lastX=mouseX;
   }
   frameCount++;
