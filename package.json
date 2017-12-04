@@ -4,7 +4,7 @@
   "description": "discovering oop programming",
   "main": "app.js",
   "scripts": {
-    "test": "run"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
