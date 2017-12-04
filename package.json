@@ -1,0 +1,23 @@
+{
+  "name": "oop-squares",
+  "version": "1.0.0",
+  "description": "discovering oop programming",
+  "main": "app.js",
+  "scripts": {
+    "test": "run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khalilacheche/OOP-Squares.git"
+  },
+  "author": "Khalil Acheche",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khalilacheche/OOP-Squares/issues"
+  },
+  "homepage": "https://github.com/khalilacheche/OOP-Squares#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "path": "^0.12.7"
+  }
+}
